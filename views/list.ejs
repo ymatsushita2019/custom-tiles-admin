@@ -1,0 +1,175 @@
+<div id="<%= data.id %>" class="group" style="background-color: white;" >
+    <ons-list-header><%= data.id %></ons-list-header>
+    <ons-list-item>
+    <div class="center">Tile Color</div>
+    <div class="right">
+        <input
+        id="color"
+        type="text"
+        class="text-input"
+        placeholder="Color"
+        value="<%= data.config.color %>"
+        <% if (!isEditable) { %> disabled <% } %>
+        />
+    </div>
+    </ons-list-item>
+    <ons-list-item>
+    <div class="center">Tile Name</div>
+    <div class="right">
+        <input
+        id="name"
+        type="text"
+        class="text-input"
+        placeholder="Tile Name"
+        value="<%= data.name %>"
+        <% if (!isEditable) { %> disabled <% } %>
+        />
+    </div>
+    </ons-list-item>
+    <ons-list-item>
+    <div class="center">Tile Icon Url</div>
+    <div class="right">
+        <input
+        id="iconUrl"
+        type="text"
+        class="text-input"
+        placeholder="Tile Icon Url"
+        value="<%= data.config.iconUrl %>"
+        <% if (!isEditable) { %> disabled <% } %>
+        />
+    </div>
+    </ons-list-item>
+    <ons-list-item>
+    <div class="center">Tile Image Url</div>
+    <div class="right">
+        <input
+        id="imageUrl"
+        type="text"
+        class="text-input"
+        placeholder="Tile Image Url"
+        value="<%= data.config.imageUrl %>"
+        <% if (!isEditable) { %> disabled <% } %>
+        />
+    </div>
+    </ons-list-item>
+    <ons-list-item>
+    <div class="center">Version</div>
+    <div class="right">
+        <input
+        id="version"
+        type="number"
+        class="text-input"
+        placeholder="Version"
+        value="<%= data.version %>"
+        <% if (!isEditable) { %> disabled <% } %>
+        />
+    </div>
+    </ons-list-item>
+    <ons-list-item>
+        <div class="center">Type</div>
+        <div class="right" style="width: 11.2em">
+            <ons-select class="select">
+                <select 
+                    id="type"
+                    class="select-input" 
+                    <% if (!isEditable) { %> disabled <% } %>
+                    >
+                    <option
+                    <% if (data.type === "web") { %> selected <% } %>
+                    >Web
+                    </option>
+                    <option
+                    <% if (data.type === "native") { %> selected <% } %>
+                    >Native
+                    </option>
+                </select>
+            </ons-select>
+        </div>
+    </ons-list-item>
+    <div id="web-container">
+    <ons-list-item style="margin-left: 1em">
+        <div id="url-title" class="center">Content Url</div>
+        <div class="right">
+            <input
+            id="url"
+            type="url"
+            class="text-input"
+            placeholder="Content Url"
+            value="<%= data.url %>"
+            <% if (!isEditable) { %> disabled <% } %>
+            />
+        </div>
+    </div>
+    <div id="native-container">
+        </ons-list-item>
+            <ons-list-item id="url-container" style="margin-left: 1em">
+            <div id="url-ios-applink-title" class="center">App Link (iOS)</div>
+            <div class="right">
+                <input
+                id="url-ios-applink"
+                type="url"
+                class="text-input"
+                placeholder="App Link (iOS)"
+                value="<%= data.appLink ? data.appLink.ios : '' %>"
+                <% if (!isEditable) { %> disabled <% } %>
+                />
+            </div>
+        </ons-list-item>
+        <ons-list-item id="url-container" style="margin-left: 1em">
+            <div id="url-android-applink-title" class="center">App Link (Android)</div>
+            <div class="right">
+                <input
+                id="url-android-applink"
+                type="url"
+                class="text-input"
+                placeholder="App Link (Android)"
+                value="<%= data.appLink ? data.appLink.android : '' %>"
+                <% if (!isEditable) { %> disabled <% } %>
+                />
+            </div>
+        </ons-list-item>
+        <ons-list-item id="url-container" style="margin-left: 1em">
+            <div id="url-ios-storelink-title" class="center">Store Link (iOS)</div>
+            <div class="right">
+                <input
+                id="url-ios-storelink"
+                type="url"
+                class="text-input"
+                placeholder="Store Link (iOS)"
+                value="<%= data.storeLink ? data.storeLink.ios : '' %>"
+                <% if (!isEditable) { %> disabled <% } %>
+                />
+            </div>
+        </ons-list-item>
+        <ons-list-item id="url-container" style="margin-left: 1em">
+            <div id="url-android-storelink-title" class="center">Store Link (Android)</div>
+            <div class="right">
+                <input
+                id="url-android-storelink"
+                type="url"
+                class="text-input"
+                placeholder="Store Link (Android)"
+                value="<%= data.storeLink ? data.storeLink.android : '' %>"
+                <% if (!isEditable) { %> disabled <% } %>
+                />
+            </div>
+        </ons-list-item>
+    </div>
+    <li class="list-item" style="padding: 1em;">
+    <button id="save-button" 
+            class="button button--outline" 
+            style="margin-right: 1em;"
+            <% if (!isEditable) { %> disabled <% } %>
+            >
+        Save
+    </button>
+    <button
+        id="remove-button"
+        class="button button--outline"
+        style="color: red; border-color: red;"
+        <% if (!isEditable) { %> disabled <% } %>
+    >
+        Remove
+    </button>
+    </ons-list-item>
+</div>

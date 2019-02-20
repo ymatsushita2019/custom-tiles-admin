@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Custom Tile Admin Server</title>
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/onsenui/css/onsen-css-components.min.css"
+    />
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <script src="https://unpkg.com/jquery/dist/jquery.min.js"></script>
+  </head>
+
+  <body>
+        <script type="text/javascript">
+
+        const ERROR_MESSAGE = " * shouldn't be empty"
+
+        function getData(id) {
+                const color = $(`#${id} #color`).val()
+                const name = $(`#${id} #name`).val()
+                const url = $(`#${id} #url`).val()
+                const version = $(`#${id} #version`).val()
+                const iconUrl = $(`#${id} #iconUrl`).val()
+                const imageUrl = $(`#${id} #imageUrl`).val()
+                const type = $(`#${id} #type`).val().toLowerCase()
+                const iOSAppLink = $(`#${id} #url-ios-applink`).val()
+                const androidAppLink = $(`#${id} #url-android-applink`).val()
+                const iOSStoreLink = $(`#${id} #url-ios-storelink`).val()
+                const androidStoreLink = $(`#${id} #url-android-storelink`).val()
+                const data = { color,
+                                name,
+                                version,
+                                iconUrl,
+                                imageUrl,
+                                type }
+
+                if (type === 'web') {
+                        data.url = url;
+                } else {
+                        data.iOSAppLink = iOSAppLink;
+                        data.androidAppLink = androidAppLink;
+                        data.iOSStoreLink = iOSStoreLink;
+                        data.androidStoreLink = androidStoreLink;
+                }
+                return data
+        }
+
+        function handle(id) {
+                $(`#${id} #save-button`).click(() => {
+                        const data = getData(`${id}`)
+                        // console.log(data)
+                        if (data.type === "web") {
+                                const title = $(`#${id} #url-title`);
+                                if (validate(title, data.url) === false) {
+                                        return;
+                                }
+                        } else {
+                                const iOSAppLinkTitle = $(`#${id} #url-ios-applink-title`);
+                                const androidAppLinkTitle = $(`#${id} #url-android-applink-title`);
+                                const iOSStoreLinkTitle = $(`#${id} #url-ios-storelink-title`);
+                                const androidStoreLinkTitle = $(`#${id} #url-android-storelink-title`);
+                                let isValid = true
+                                if (validate(iOSAppLinkTitle, data.iOSAppLink) === false) {
+                                        isValid = false
+                                }
+                                if (validate(androidAppLinkTitle, data.androidAppLink) === false) {
+                                        isValid = false
+                                }
+                                if (validate(iOSStoreLinkTitle, data.iOSStoreLink) === false) {
+                                        isValid = false
+                                }
+                                if (validate(androidStoreLinkTitle, data.androidStoreLink) === false) {
+                                        isValid = false
+                                }
+                                if (isValid === false) return
+                        }
+                        $.ajax({ url: `/tiles/update/${id}`,
+                                type: 'PUT',
+                                data: getData(`${id}`),
+                                success: function(result) {
+                                        alert(`${result.id} saved`)
+                                }
+                        });
+                });
+                $(`#${id} #remove-button`).click(() => {
+                        $.ajax({ url: `/tiles/delete/${id}`,
+                                type: 'DELETE',
+                                success: function(result) {
+                                        console.log(id)
+                                        $(`#${result.id}`).remove()
+                                        alert(`${result.id} removed`)
+                                }
+                        });
+                });
+                $(`#${id} #type`).change(() => {
+                        switchType(id)
+                })
+                switchType(id)
+        }
+
+        function switchType(id) {
+                const type = $(`#${id} #type`).val()
+                if (type === "Web") {
+                        $(`#${id} #web-container`).show()
+                        $(`#${id} #native-container`).hide()
+                } else {
+                        $(`#${id} #web-container`).hide()
+                        $(`#${id} #native-container`).show()
+                }
+        }
+
+        function validate(title, url) {
+                title.css("color", "")
+                title.text(title.text().replace(ERROR_MESSAGE, ""))
+                if (url === "") {
+                        title.text(title.text() + ERROR_MESSAGE )
+                        title.css("color", "red")
+                        return false;
+                }
+                return true
+        }
+
+        $(() => {
+                $("#add-tile").click(() => {
+                        $.get('/addTile', function (data) {
+                                $( "#list" ).append(data);
+                                const id = $( ".group" ).get( -1 ).id;
+                                handle(id)
+                        });
+                });
+
+                <% for(let i = 0; i < data.length; i++) { %> 
+                        handle("<%= data[i].id %>")
+                <% } %>
+
+
+        });
+    </script>
+        <ons-page >
+                <div id="list">
+                        <% for(let i = 0; i < data.length; i++) { %> 
+                                <%- include('list', {data:data[i]}, isEditable); -%> 
+                        <% } %>
+                </div>
+                <ons-list-item>
+                        <button
+                        id="add-tile"
+                        class="button--large--cta"
+                        style="width: 95%; margin: 0 auto;"
+                        <% if (!isEditable) { %> disabled <% } %>
+                        >
+                        Add a Tile
+                        </button>
+                </ons-list-item>
+        </ons-page>
+  </body>
+</html>
